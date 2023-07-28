@@ -5,7 +5,8 @@ RISC-V ```rv32im_zmmul``` VHDL implementation
 <details>
   <summary>07/28/23 </summary>
   
-  + I2C (Master Write) module added, which simulates and synthesizes. Will send single & multiple bytes at 100 kHz. 
+  + I2C (Master Write) module added, which simulates and synthesizes.
+  + Capable of sending single & multiple bytes at 100 kHz. 
 </details>
 <details>
   <summary>07/21/23  </summary>
