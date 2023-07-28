@@ -12,14 +12,15 @@ end entity;
 
 architecture branch_comparator_rtl of branch_comparator is
     begin
+      
     
     process(i_A, i_B, i_BrU)
 	   begin
-	       if(i_A = i_B) then -- BrEq = 1 if A = B
+	       if(i_A = i_B) then 
 	           o_BrEq <= '1';
-	           o_BrLT <= '0';
-	       
+	           o_BrLT <= '0'; 
 	       else
+	           o_BrEq <= '0';
                if(i_BrU = '1') then
                    if(unsigned(i_A) < unsigned(i_B)) then
                        o_BrLT <= '1';
@@ -33,7 +34,6 @@ architecture branch_comparator_rtl of branch_comparator is
                        o_BrLT <= '0';
                    end if;
                end if;
-               o_BrEq <= '1';
            end if;
 	end process;
         
