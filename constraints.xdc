@@ -2,7 +2,7 @@
 set_property PACKAGE_PIN W5 [get_ports CLK]
 set_property IOSTANDARD LVCMOS33 [get_ports CLK]
 #create_clock -name clk -period 10 [get_ports clk]
-create_clock -period 50.000 -name CLK -waveform {0.000 25.000} -add [get_ports CLK]
+create_clock -period 20.000 -name CLK -add [get_ports CLK]
 
 set_property PACKAGE_PIN R3 [get_ports RST]
 set_property IOSTANDARD LVCMOS33 [get_ports RST]
@@ -31,6 +31,42 @@ set_property IOSTANDARD LVCMOS33 [get_ports {JA[6]}]
 
 set_property PACKAGE_PIN G3 [get_ports {JA[7]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {JA[7]}]
+
+
+set_property PACKAGE_PIN J3 [get_ports io_SCL]
+set_property IOSTANDARD LVCMOS33 [get_ports io_SCL]
+set_property PULLUP TRUE [get_ports io_SCL]
+
+set_property PACKAGE_PIN L3 [get_ports io_SDA]
+set_property IOSTANDARD LVCMOS33 [get_ports io_SDA]
+set_property PULLUP TRUE [get_ports io_SDA]
+
+
+## PMOD JX
+#set_property PACKAGE_PIN J3 [get_ports {JX[0]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {JX[0]}]
+
+#set_property PACKAGE_PIN L3 [get_ports {i_SDA[1]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {i_SDA[1]}]
+
+#set_property PACKAGE_PIN M2 [get_ports {JX[2]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {JX[2]}]
+
+#set_property PACKAGE_PIN N2 [get_ports {JX[3]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {JX[3]}]
+
+#set_property PACKAGE_PIN K3 [get_ports {JX[4]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {JX[4]}]
+
+#set_property PACKAGE_PIN M3 [get_ports {JX[5]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {JX[5]}]
+
+#set_property PACKAGE_PIN M1 [get_ports {JX[6]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {JX[6]}]
+
+#set_property PACKAGE_PIN N1 [get_ports {JX[7]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {JX[7]}]
+
 
 ## LEDs
 set_property PACKAGE_PIN U16 [get_ports {led[0]}]
