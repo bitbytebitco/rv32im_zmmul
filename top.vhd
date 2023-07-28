@@ -7,7 +7,9 @@ entity top is
         RST : in std_logic;
         SW  : in std_logic_vector(7 downto 0);
         JA : out std_logic_vector(7 downto 0);
-        led : out std_logic_vector(15 downto 0)
+        led : out std_logic_vector(15 downto 0);
+        io_SCL : inout std_logic;
+        io_SDA : inout std_logic
     );
 end entity;
 
@@ -32,7 +34,10 @@ architecture rtl of top is
         clock : in std_logic;
         reset : in std_logic;
         port_in_00  : in std_logic_vector(7 downto 0);
-        o_port_out_00  : out std_logic_vector(15 downto 0)
+        o_port_out_00  : out std_logic_vector(15 downto 0);
+        o_SCL : out std_logic;
+        i_SDA : in std_logic;
+        o_SDA : out std_logic
     );
   end component;
   
@@ -58,13 +63,17 @@ architecture rtl of top is
                 clock => CLK,
                 reset => w_RST,
                 port_in_00 => port_in_00,
-                o_port_out_00 => P0
+                o_port_out_00 => P0, 
+                o_SCL => io_SCL,
+                i_SDA => io_SDA,
+                o_SDA => io_SDA
             );
-        
-     
+
+
         -- JA Pmod
         JA <= P0(7 downto 0);
---        JA <= x"FF";
+
+
 
 end architecture;
 
