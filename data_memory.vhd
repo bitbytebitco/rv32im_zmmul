@@ -16,22 +16,26 @@ end entity;
 architecture data_memory_arch of data_memory is
     signal EN : std_logic; 
 
-    type rw_type is array (1024 to 2047) of std_logic_vector(7 downto 0);
+    type rw_type is array (512 to 2047) of std_logic_vector(7 downto 0);
     signal RW0, RW1, RW2, RW3: rw_type;	
     
     signal clock_n : std_logic;
     signal r_DataR : std_logic_vector(31 downto 0) := x"00000000";
+    
+    signal v_byte_00, v_byte_01, v_byte_02, v_byte_03 : std_logic_vector(7 downto 0);
 
     begin
     
         clock_n <= not clock;
         
-        out_DataR(31 downto 0) <= r_DataR when EN = '1' and in_MemRW = '1' else x"00000000";
+        out_DataR(31 downto 0) <= r_DataR when EN = '1' and in_MemRW = '0' else x"00000000";
+        
+
 
         -- Enable Process
         enable : process(in_Addr)
           begin
-            if(to_integer(unsigned(in_Addr)) >= 1024) and (to_integer(unsigned(in_Addr)) <= 2047) then
+            if(to_integer(unsigned(in_Addr)) >= 512) and (to_integer(unsigned(in_Addr)) <= 2047) then
               EN <= '1';
             else 
               EN <= '0';
@@ -40,16 +44,26 @@ architecture data_memory_arch of data_memory is
         
         
         -- Memory Process
-        memory : process(clock, EN, in_MemRW, in_Addr, i_ByteSel)
+        memory : process(clock, EN, in_MemRW, in_Addr, i_ByteSel, v_byte_00, v_byte_01, v_byte_02, v_byte_03)
             variable r : integer; 
             variable n : integer := 8;
-            variable v_byte_00, v_byte_01, v_byte_02, v_byte_03 : std_logic_vector(7 downto 0);
+--            variable v_byte_00, v_byte_01, v_byte_02, v_byte_03 : std_logic_vector(7 downto 0);
   
             begin
             
                 if(EN = '1') then 
-                    if(to_integer(unsigned(in_Addr)) >= 1024) and (to_integer(unsigned(in_Addr)) <= 2047) then
-                        if(in_MemRW = '1') then -- write
+                    if(to_integer(unsigned(in_Addr)) >= 512) and (to_integer(unsigned(in_Addr)) <= 2047) then
+                    
+                            v_byte_00 <= RW0(to_integer(unsigned(in_Addr) ));
+                            v_byte_01 <= RW1(to_integer(unsigned(in_Addr) ));
+                            v_byte_02 <= RW2(to_integer(unsigned(in_Addr) ));
+                            v_byte_03 <= RW3(to_integer(unsigned(in_Addr) ));  
+                                               
+                    
+                        if(in_MemRW = '1') then 
+                        
+                            -- WRITE
+                            
                             -- Sync Write
                             if(rising_edge(clock)) then 
                             
@@ -72,13 +86,9 @@ architecture data_memory_arch of data_memory is
                             end if;
                             
                         else
+                            -- READ
                     
-                            if(rising_edge(clock)) then
-                            
-                                v_byte_00 := RW0(to_integer(unsigned(in_Addr) ));
-                                v_byte_01 := RW1(to_integer(unsigned(in_Addr) ));
-                                v_byte_02 := RW2(to_integer(unsigned(in_Addr) ));
-                                v_byte_03 := RW3(to_integer(unsigned(in_Addr)) );        
+--                            if(rising_edge(clock)) then     
                              
                                 case i_ByteSel is
                                    when "000" => -- LB
@@ -102,7 +112,8 @@ architecture data_memory_arch of data_memory is
                                    when others => -- LW
                                         r_DataR(31 downto 0) <= v_byte_03 & v_byte_02 & v_byte_01 & v_byte_00;
                                 end case;
-                            end if;
+                                
+--                            end if;
                         
                         end if;
                         
