@@ -38,9 +38,8 @@ architecture register_file_arch of register_file is
 --        1 => x"7FFFFFFF", 
 --        5 => x"80000000",   
 --        7 => x"00000FF0",
-        1 => x"FFFFFFFF", 
-        5 => x"00000FF0",
-        8 => x"00000000",  
+--        5 => x"00000FF0", -- GPIO OUT
+--        5 => x"00000403", -- I2C CTRL WRD
         others => x"00000000"
     );
 
