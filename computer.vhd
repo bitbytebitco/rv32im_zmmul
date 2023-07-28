@@ -17,7 +17,10 @@ entity computer is
         clock : in std_logic;
         reset : in std_logic;
         port_in_00  : in std_logic_vector(7 downto 0) := x"00";
-        o_port_out_00 : out std_logic_vector(15 downto 0) 
+        o_port_out_00 : out std_logic_vector(15 downto 0);
+        o_SCL : out std_logic := 'Z';
+        i_SDA : in std_logic := 'Z';
+        o_SDA : out std_logic := 'Z'
     );
 end entity;
 
@@ -26,7 +29,7 @@ architecture computer_arch of computer is
     -- signals
     signal w_write : std_logic;
     signal w_byte_sel : std_logic_vector(2 downto 0);
-    signal w_address, data_in, data_out : std_logic_vector( 31 downto 0);
+    signal w_address, data_in, data_out : std_logic_vector( 31 downto 0) := x"00000000";
     signal r_port_out_00 : std_logic_vector(15 downto 0);
     
     -- clock div
@@ -61,7 +64,10 @@ architecture computer_arch of computer is
             i_byte_sel : in std_logic_vector(2 downto 0);
             port_in_00  : in std_logic_vector(7 downto 0);
             port_out_00  : out std_logic_vector(15 downto 0);
-            o_data : out std_logic_vector(31 downto 0)
+            o_data : out std_logic_vector(31 downto 0); 
+            o_SCL : out std_logic;
+            i_SDA : in std_logic;
+            o_SDA : out std_logic
         );
     end component;
 
@@ -115,7 +121,10 @@ architecture computer_arch of computer is
                 i_byte_sel => w_byte_sel,
                 o_data => data_out, 
                 port_in_00 => port_in_00,
-                port_out_00 => r_port_out_00
+                port_out_00 => r_port_out_00, 
+                o_SCL => o_SCL,
+                i_SDA => i_SDA,
+                o_SDA => o_SDA
              );
 end architecture;
 
