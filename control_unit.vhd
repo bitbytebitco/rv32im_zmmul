@@ -195,7 +195,7 @@ architecture control_unit_arch of control_unit is
                                 out_BSel <= '1';
                                 out_ASel <= '0';
                                 out_ALUSel <= "0010"; -- ADD
-                                out_MemRW <= '1';
+                                out_MemRW <= '0';
                                 out_WBSel <= "01"; -- "00"=DataR, "01"=ALU, "10"=PC_plus_4
                     elsif (in_inst(14 downto 12) = "010") then -- SLTI
                                 out_PCSel <= '0'; -- "0"=PC_plus_4, "1"=ALU
