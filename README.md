@@ -3,13 +3,13 @@ RISC-V ```rv32im_zmmul``` VHDL implementation
 
 # Status Updates  
 <details>
-  <summary>07/28/23 </summary>
+  <summary>07/28/23 - Added I2C </summary>
   
   + I2C (Master Write) module added, which simulates and synthesizes.
   + Capable of sending single & multiple bytes at 100 kHz. 
 </details>
 <details>
-  <summary>07/21/23  </summary>
+  <summary>07/21/23 - Initial Report (Blinky) </summary>
   
   + Basic blinking led program properly synthesized and implemented on Basys 3
     + Using 50 MHz CPU clock  
