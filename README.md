@@ -84,3 +84,17 @@ RISC-V ```rv32im_zmmul``` VHDL implementation
   #### Synthesized Oscilloscope Output (50 MHz CPU Clock)
 ![Synthesis Waveform](https://github.com/bitbytebitco/rv32im_zmmul/blob/master/I2C_send_multi_byte_oscope.png?raw=true)
 </details>
+
+## Bootloading
+<details>
+    <summary>Howto</summary>
+  
+#### how to bootload an assembly program:
+
++ Restart system (currently I'm using VIO)
++ Switch(0) needs to be HIGH
+    + This halts the PC and puts `i_load_imem` HIGH
++ Use UART Serial to send bytes 
+    + 115200 @ 8-N-1
++ Switch(0) LOW to run PC from 0x00
+</details>
