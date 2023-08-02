@@ -87,14 +87,30 @@ RISC-V ```rv32im_zmmul``` VHDL implementation
 
 ## Bootloading
 <details>
-    <summary>Howto</summary>
+    <summary>Overview</summary>
   
-#### how to bootload an assembly program:
+#### Overview on how to bootload an assembly program:
 
 + Restart system (currently I'm using VIO)
 + Switch(0) needs to be HIGH
     + This halts the PC and puts `i_load_imem` HIGH
 + Use UART Serial to send bytes 
     + 115200 @ 8-N-1
++ Switch(0) LOW to run PC from 0x00
+</details>
+<details>
+    <summary>Using the Makefile & Python UART Script</summary>
+  
+#### How to bootload using the Makefile and Python UART Script:
+
++ Restart system (currently I'm using VIO)
++ Switch(0) needs to be HIGH
+    + This halts the PC and puts `i_load_imem` HIGH
++ At a linux terminal:
+  + ```BASENAME=fp_add make hex```
+    + Assuming there is a riscv assembly file ```fp_add.S```
+    + This Makefile diassembles hex to a file [BASENAME].dump (fp_add.dump)
+  + ```sudo bytes_to_uart.py fp_add.dump```
+    + This python script parses each line's 32-bit hex instruction and sends each byte little-endian ordered
 + Switch(0) LOW to run PC from 0x00
 </details>
