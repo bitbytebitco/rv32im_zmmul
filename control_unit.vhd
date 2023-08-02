@@ -27,6 +27,7 @@ architecture control_unit_arch of control_unit is
     -- Mnemonic Constant Declarations
     constant LUI : std_logic_vector(6 downto 0) := "0110111"; -- Load Upper Immediate : rd ? imm u, pc ? pc+4
     constant AUIPC : std_logic_vector(6 downto 0) := "0010111"; -- Add Upper Immediate to PC : rd ? pc + imm u, pc ? pc+4
+    constant JAL : std_logic_vector(6 downto 0) := "1101111";
     constant RTYPE : std_logic_vector(6 downto 0) := "0110011";
     constant ITYPE_ARITH : std_logic_vector(6 downto 0) := "0010011";
     constant ITYPE_LOAD : std_logic_vector(6 downto 0) := "0000011";
@@ -82,6 +83,17 @@ architecture control_unit_arch of control_unit is
                     out_ALUSel <= "0010"; -- "0000"=A, "0001"=B, "0010"=Add, "0011"=Sub
                     out_MemRW <= '0';
                     out_WBSel <= "01"; -- "00"=DataR, "01"=ALU, "10"=PC_plus_4   
+                when JAL =>  
+                    out_PCSel <= '1'; -- "0"=PC_plus_4, "1"=ALU
+                    out_incr_pc <= '1';
+                    out_ImmSel <= "100"; -- J-type
+                    out_RegWEn <= '1';
+                    out_BrUn <= '0';
+                    out_BSel <= '1';
+                    out_ASel <= '1';
+                    out_ALUSel <= "0010"; -- ADD
+                    out_MemRW <= '0';
+                    out_WBSel <= "10"; -- "00"=DataR, "01"=ALU, "10"=PC_plus_4   
                 when STYPE =>   
                     if (in_inst(14 downto 12) = "000") then                             -- SB 
                         out_PCSel <= '0'; -- "0"=PC_plus_4, "1"=ALU
@@ -304,6 +316,22 @@ architecture control_unit_arch of control_unit is
                         out_ALUSel <= "0010"; -- ADD
                         out_MemRW <= '0';
                         out_WBSel <= "--"; -- "00"=DataR, "01"=ALU, "10"=PC_plus_4    
+                    elsif (in_inst(14 downto 12) = "111") then -- BGEU    
+                        if(in_BrLT = '0' or in_BrEq = '1') then 
+                            out_PCSel <= '1'; -- "0"=PC_plus_4, "1"=ALU
+                        else 
+                            out_PCSel <= '0'; 
+                        end if;
+                        
+                        out_incr_pc <= '0';
+                        out_ImmSel <= "011"; -- "000"=I
+                        out_RegWEn <= '0';
+                        out_BrUn <= '1';
+                        out_BSel <= '1';
+                        out_ASel <= '1';
+                        out_ALUSel <= "0010"; -- ADD
+                        out_MemRW <= '0';
+                        out_WBSel <= "--"; -- "00"=DataR, "01"=ALU, "10"=PC_plus_4 
                     elsif (in_inst(14 downto 12) = "110") then -- BLTU    
                         if(in_BrLT = '1') then 
                             out_PCSel <= '1'; -- "0"=PC_plus_4, "1"=ALU

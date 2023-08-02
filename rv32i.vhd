@@ -5,15 +5,19 @@ entity rv32i is
 	port(
 		clock : in std_logic;
 		reset : in std_logic;
+		i_inst: in std_logic_vector(31 downto 0);
+		i_load_imem : in std_logic;
 		o_address : out std_logic_vector( 31 downto 0);
 		o_write : out std_logic;
 		o_byte_sel : out std_logic_vector(2 downto 0);
+		o_PC : out std_logic_vector(31 downto 0);
 		to_memory : out std_logic_vector( 31 downto 0);
 		from_memory : in std_logic_vector( 31 downto 0)
 	);
 end entity;
 
 architecture rv32i_arch of rv32i is
+
     -- CONTROL UNIT
     component control_unit 
 	port(
@@ -39,9 +43,10 @@ architecture rv32i_arch of rv32i is
 	port(
 		clock : in std_logic;
 	    reset : in std_logic;
+	    i_load_imem : in std_logic;
 		in_PCSel : in std_logic;
 		in_incr_pc : in std_logic;
-		out_inst : out std_logic_vector(31 downto 0);
+		in_inst : in std_logic_vector(31 downto 0);
 		in_ImmSel : in std_logic_vector(2 downto 0);
 		in_RegWEn : in std_logic;
 		in_BrUn : in std_logic;
@@ -57,25 +62,32 @@ architecture rv32i_arch of rv32i is
 		o_address : out std_logic_vector( 31 downto 0);
 		o_write : out std_logic;
 		o_byte_sel : out std_logic_vector(2 downto 0);
+		o_PC : out std_logic_vector(31 downto 0);
 		to_memory : out std_logic_vector( 31 downto 0)
 	);
     end component; 
 
     -- SIGNAL DECLARATIONS
-    signal PCSel, RegWEn, BrUn, BrEq, BrLT, BSel, ASel, MemRW, incr_pc : std_logic;
+    signal PCSel, RegWEn, BrUn, BrEq, BrLT, BSel, ASel, MemRW, incr_pc, w_load_imem : std_logic;
     signal ImmSel : std_logic_vector(2 downto 0);
-    signal inst : std_logic_vector(31 downto 0);
+    signal r_inst, r_PC : std_logic_vector(31 downto 0);
     signal ALUSel : std_logic_vector(3 downto 0);
     signal WBSel : std_logic_vector(1 downto 0);
     signal w_ByteSEL : std_logic_vector(2 downto 0);
 
     begin
+    
+    r_inst <= i_inst;
+    o_PC <= r_PC;
+    
+    w_load_imem <= i_load_imem;
+    
 	-- CONTROL UNIT INIT
 	CTRL_UNIT : control_unit 
 		port map(
 			out_PCSel => PCSel,
 			out_incr_pc => incr_pc,
-			in_inst => inst,
+			in_inst => r_inst,
 			out_ImmSel => ImmSel,
 			out_RegWEn => RegWEn,
 			out_BrUn => BrUn,
@@ -99,10 +111,11 @@ architecture rv32i_arch of rv32i is
 	DTA_PTH : data_path 
 		port map(
 			clock => clock,
-			reset => reset, 	
+			reset => reset, 
+			i_load_imem => w_load_imem,
 			in_PCSel => PCSel,
 			in_incr_pc => incr_pc,
-			out_inst => inst,
+			in_inst => r_inst,
 			in_ImmSel => ImmSel,
 			in_RegWEn => RegWEn,
 			in_BrUn => BrUn,
@@ -118,6 +131,7 @@ architecture rv32i_arch of rv32i is
 			o_address => o_address,
 			o_write => o_write,
 			o_byte_sel => o_byte_sel,
+			o_PC => r_PC,
 			to_memory => to_memory
 		);
 end architecture;

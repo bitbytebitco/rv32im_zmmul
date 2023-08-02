@@ -6,9 +6,10 @@ entity data_path is
 	port(
 		clock : in std_logic;
 	    reset : in std_logic;
+	    i_load_imem : in std_logic;
 		in_PCSel : in std_logic;
 		in_incr_pc : in std_logic;
-		out_inst : out std_logic_vector(31 downto 0);
+		in_inst : in std_logic_vector(31 downto 0);
 		in_ImmSel : in std_logic_vector(2 downto 0);
 		in_RegWEn : in std_logic;
 		in_BrUn : in std_logic;
@@ -24,6 +25,7 @@ entity data_path is
 		o_address : out std_logic_vector( 31 downto 0);
 		o_write : out std_logic;
 		o_byte_sel : out std_logic_vector(2 downto 0);
+		o_PC : out std_logic_vector(31 downto 0);
 		to_memory : out std_logic_vector( 31 downto 0)
 	);
 end entity;
@@ -38,26 +40,9 @@ architecture data_path_arch of data_path is
     signal w_inst, w_imm, ALUResult, in_PC, PC, PC_plus_four, DataA, DataB, A, B, wb : std_logic_vector(31 downto 0) := x"00000000";
     signal PC_uns, PC_plus_four_uns : unsigned(31 downto 0) := x"00000000";
     
-    -- Debug
-    attribute MARK_DEBUG : string;
-    ATTRIBUTE MARK_DEBUG OF PC : SIGNAL IS "true";
-    ATTRIBUTE MARK_DEBUG OF DataB : SIGNAL IS "true";
-    ATTRIBUTE MARK_DEBUG OF o_address : SIGNAL IS "true";
-    ATTRIBUTE MARK_DEBUG OF to_memory : SIGNAL IS "true";
-    ATTRIBUTE MARK_DEBUG OF wb : SIGNAL IS "true";
-
     signal opcode : std_logic_vector(6 downto 0);
     
     signal rd : std_logic_vector(4 downto 0);  
-
-    --IMEM
-    component instruction_memory
-        port(
-            in_addr : in std_logic_vector(31 downto 0);
-            out_inst : out std_logic_vector(31 downto 0)
-        );
-    end component;
-
 
     -- REGISTER FILE
     component register_file
@@ -107,15 +92,14 @@ architecture data_path_arch of data_path is
     w_BrU <= in_BrUn; -- assigning to signal for reading
     o_write <= in_MemRW;
     o_byte_sel <= in_ByteSel;
-    out_inst <= w_inst;
     o_address <= ALUResult;
     
     to_memory <= DataB;
 
     -- PC Mux Init
-    PC_MUX : process(clock, reset, in_PCSel, ALUResult, PC_plus_four)
+    PC_MUX : process(clock, reset, i_load_imem, in_PCSel, ALUResult, PC_plus_four)
       begin
-        if(reset = '0') then
+        if((reset = '0') or (i_load_imem = '1')) then
             PC <= x"00000000";
         elsif(rising_edge(clock)) then
             if(in_PCSel = '1') then
@@ -126,44 +110,20 @@ architecture data_path_arch of data_path is
         end if;
     end process;	
    
-
-    -- PC Adder (plus 4)
---    PC_uns <= unsigned(PC);
---    PC_plus_four <= std_logic_vector(PC_plus_four_uns);
     
     PC_plus_four <= std_logic_vector(unsigned(PC) + 4);
-
---      PC_plus_four <= std_logic_vector(unsigned(PC) + 4) when in_incr_pc = '1' else PC_plus_four;
     
---    in_PC <= PC_plus_four;
-
---    PC_ADDER : process(PC_uns, in_incr_pc)
---        begin
---            --PC_plus_four_uns <= x"00000000";
---            if(in_incr_pc = '1') then
---                PC_plus_four_uns <= PC_uns + 4;
---            end if;
---    end process;
-    
-    
-
-    -- IMEM init
-    IMEM : instruction_memory 
-        port map(
-            in_addr => PC,
-            out_inst => w_inst
-        );
+        
+    o_PC <= PC;    
+    w_inst <= in_inst;
 
     -- Immediate Generation
-    
     IMMEDIATE_GEN : imm_gen 
         port map(
             i_inst => w_inst,
             i_ImmSel => in_ImmSel,
             o_imm => w_imm
         );
-    
-    
 
     -- Register File
     REG_FILE : register_file
@@ -199,7 +159,6 @@ architecture data_path_arch of data_path is
             out_ALUResult => ALUResult
         );
 
-
     -- B Multiplexer Init
     BMUX : process(in_BSel, DataB, w_imm)
         begin
@@ -220,20 +179,6 @@ architecture data_path_arch of data_path is
                 A <= DataA;
             end if;
     end process;
-
-
-    -- DMEM init
---    DMEM : data_memory 
---        port map(
---            clock => clock,
---            in_Addr => ALUResult,
---            in_MemRW => w_MemRW, 
---            in_DataW => DataB,
---            i_ByteSel => w_ByteSel,
---            out_DataR => w_out_mem
---        );
-
---wb <= ALUResult;
 
     -- wb Mux Init
     WB_MUX : process(in_WBSel, from_memory, ALUResult, PC_plus_four)

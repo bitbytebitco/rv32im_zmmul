@@ -30,14 +30,31 @@ end entity;
 
 architecture register_file_arch of register_file is
     signal EN : std_logic; 
+    signal r_register_2_debug : std_logic_vector(31 downto 0);
+    
+        -- Debug
+    attribute MARK_DEBUG : string;
+    ATTRIBUTE MARK_DEBUG OF r_register_2_debug : SIGNAL IS "true";
 
     type reg_bank_type is array (0 to 31) of std_logic_vector(31 downto 0);
     signal REG: reg_bank_type := (
         0 => x"00000000",
---        1 => x"9234F6F8",
---        1 => x"7FFFFFFF", 
+        1 => x"00000001",
+        3 => x"00000FF1", -- FP-module write A
+        4 => x"00000FF2", -- FP-module write B
+        5 => x"00000FE1", -- FP-module read addr
+        6 => x"41A40000", -- 20.5 float32
+        7 => x"420F0000", -- 35.75 float32
+        8 => x"C20F0000", --   -35.75 
+        9 => x"41A40000", --   20.5
+        10 => x"420F0000", --  35.75
+        11 => x"41B40000", --  22.5
+        12 => x"41460000", --  12.375
+        13 => x"C0B00000",--   -5.5
+        14 => x"C1460000",--   -12.375
+        15 => x"40B00000",--   5.5
 --        5 => x"80000000",   
---        7 => x"00000FF0",
+--        2 => x"00000FF0",
 --        5 => x"00000FF0", -- GPIO OUT
 --        5 => x"00000403", -- I2C CTRL WRD
         others => x"00000000"
@@ -45,7 +62,8 @@ architecture register_file_arch of register_file is
 
     begin
     
-
+    r_register_2_debug <= REG(2);
+    
 	 -- async read
 	 out_DataA <= REG(to_integer(unsigned(in_AddrA)));
 	 out_DataB <= REG(to_integer(unsigned(in_AddrB)));
