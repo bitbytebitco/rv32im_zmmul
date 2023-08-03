@@ -109,8 +109,12 @@ RISC-V ```rv32im_zmmul``` VHDL implementation
 <details>
   <summary>Waveform Screenshot</summary>
   
-  #### Synthesized Oscilloscope Output (50 MHz CPU Clock)
+#### Simulation Waveform (50 MHz CPU Clock)
+![Simulation Waveform](https://github.com/bitbytebitco/rv32im_zmmul/blob/master/I2C_send_multi_byte_sim.png?raw=true)
+  
+#### Synthesized Oscilloscope Output (50 MHz CPU Clock)
 ![Synthesis Waveform](https://github.com/bitbytebitco/rv32im_zmmul/blob/master/I2C_send_multi_byte_oscope.png?raw=true)
+
 </details>
 
 ## Bootloading
