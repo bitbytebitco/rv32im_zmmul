@@ -47,7 +47,35 @@ RISC-V ```rv32im_zmmul``` VHDL implementation
 
 ## I2C Implementation
 <details>
-  <summary>RISCV Assembly</summary>
+  <summary>Operating Procedures</summary>
+  
+#### Single-Byte Procedure:
+
++ set ```i_addr``` (slave address)
++ set ```i_buffer_clear``` HIGH
++ set ```i_tx_byte``` (byte to be sent)
++ set ```i_byte_cnt``` to 1
++ set ```i_en``` HIGH
++ poll ```o_done```
+  + if ```o_done``` HIGH then set ```i_done_clear``` HIGH
+  + This should generate stop condition
+
+
+#### Multi-Byte Procedure:
+
++ set ```i_addr``` (slave address)
++ set ```i_tx_byte``` (first byte to be sent)
++ set ```i_byte_cnt``` to # bytes
++ set ```i_en``` HIGH
++ poll ```o_buffer_clear```
+  + if ```o_buffer_clear``` HIGH then
+  + update ```i_tx_byte``` with next byte to be sent
+  + set ```i_buffer_clear``` HIGH to allow system to continue
+
+</details>
+
+<details>
+  <summary>RISCV Assembly Example</summary>
   
   #### RISCV Assembly
   ```
