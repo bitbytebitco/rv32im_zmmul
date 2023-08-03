@@ -107,7 +107,7 @@ RISC-V ```rv32im_zmmul``` VHDL implementation
 </details>
 
 <details>
-  <summary>Waveform Screenshot</summary>
+  <summary>Waveform Screenshots</summary>
   
 #### Simulation Waveform (50 MHz CPU Clock)
 ![Simulation Waveform](https://github.com/bitbytebitco/rv32im_zmmul/blob/master/I2C_send_multi_byte_sim.png?raw=true)
