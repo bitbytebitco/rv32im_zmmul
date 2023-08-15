@@ -23,7 +23,7 @@ RISC-V ```rv32im_zmmul``` VHDL implementation
 <details>
   <summary>Simulation Waveform</summary>
   
-  ![Simulation Waveform](https://github.com/bitbytebitco/rv32im_zmmul/blob/master/rv32im_zmmul_blinking_led.png?raw=true)
+  ![Simulation Waveform](https://github.com/bitbytebitco/rv32im_zmmul/blob/master/images/rv32im_zmmul_blinking_led.png?raw=true)
 </details>
 <details>
   <summary>Assembly Program (RISCV) </summary>
@@ -42,7 +42,7 @@ RISC-V ```rv32im_zmmul``` VHDL implementation
   <summary>Synthesis Waveform</summary>
   
   #### Synthesized Oscilloscope Output (50 MHz CPU Clock)
-  ![Simulation Waveform](https://github.com/bitbytebitco/rv32im_zmmul/blob/master/rv32im_zmmul_blinking_led_oscope.png?raw=true)
+  ![Simulation Waveform](https://github.com/bitbytebitco/rv32im_zmmul/blob/master/images/rv32im_zmmul_blinking_led_oscope.png?raw=true)
 </details>
 
 ## I2C Implementation
@@ -110,10 +110,10 @@ RISC-V ```rv32im_zmmul``` VHDL implementation
   <summary>Waveform Screenshots</summary>
   
 #### Simulation Waveform (50 MHz CPU Clock)
-![Simulation Waveform](https://github.com/bitbytebitco/rv32im_zmmul/blob/master/I2C_send_multi_byte_sim.png?raw=true)
+![Simulation Waveform](https://github.com/bitbytebitco/rv32im_zmmul/blob/master/images/I2C_send_multi_byte_sim.png?raw=true)
   
 #### Synthesized Oscilloscope Output (50 MHz CPU Clock)
-![Synthesis Waveform](https://github.com/bitbytebitco/rv32im_zmmul/blob/master/I2C_send_multi_byte_oscope.png?raw=true)
+![Synthesis Waveform](https://github.com/bitbytebitco/rv32im_zmmul/blob/master/images/I2C_send_multi_byte_oscope.png?raw=true)
 
 </details>
 
