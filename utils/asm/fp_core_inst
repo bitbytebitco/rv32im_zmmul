@@ -1,0 +1,16 @@
+sb x6, 0(x4)             -- set 0xFF1 to value at x6
+sb x7, 0(x4)             -- set 0xFF1 to value at x7
+lw x2, 0(x5)             -- load 0xFE1 to x2
+sb x8, 0(x4)             -- set 0xFF1 to value at x8
+sb x9, 0(x4)             -- set 0xFF1 to value at x9
+lw x2, 0(x5)             -- load 0xFE1 to x2
+sb x10, 0(x4)            -- set 0xFF1 to value at x10
+sb x11, 0(x4)            -- set 0xFF1 to value at x11
+lw x2, 0(x5)             -- load 0xFE1 to x2
+sb x12, 0(x4)            -- set 0xFF1 to value at x12
+sb x13, 0(x4)            -- set 0xFF1 to value at x13
+lw x2, 0(x5)             -- load 0xFE1 to x2
+sb x14, 0(x4)            -- set 0xFF1 to value at x14
+sb x15, 0(x4)            -- set 0xFF1 to value at x15
+lw x2, 0(x5)             -- load 0xFE1 to x2
+bltu x2, x3, -16         -- return to 0

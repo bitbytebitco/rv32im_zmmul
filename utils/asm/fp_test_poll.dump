@@ -1,0 +1,89 @@
+
+fp_test_poll.elf:     file format elf32-littleriscv
+
+SYMBOL TABLE:
+00000000 l    d  .text	00000000 .text
+00000000 l    d  .riscv.attributes	00000000 .riscv.attributes
+00000000 l    df *ABS*	00000000 fp_test_poll.o
+00000ff1 l       *ABS*	00000000 F_A
+00000ff2 l       *ABS*	00000000 F_B
+00000fe1 l       *ABS*	00000000 F_RESULT
+00000fe2 l       *ABS*	00000000 F_STAT
+00000ff3 l       *ABS*	00000000 F_CTL
+00000001 l       *ABS*	00000000 EN
+00000002 l       *ABS*	00000000 DONE_CLEAR
+41a40000 l       *ABS*	00000000 A1
+420f0000 l       *ABS*	00000000 B1
+c20f0000 l       *ABS*	00000000 A2
+41a40000 l       *ABS*	00000000 B2
+420f0000 l       *ABS*	00000000 A3
+41b40000 l       *ABS*	00000000 B3
+41460000 l       *ABS*	00000000 A4
+c0b00000 l       *ABS*	00000000 B4
+c1460000 l       *ABS*	00000000 A5
+40b00000 l       *ABS*	00000000 B5
+00000030 l       .text	00000000 _p1
+00000080 l       .text	00000000 _set_and_poll
+00000040 l       .text	00000000 _p2
+00000050 l       .text	00000000 _p3
+00000060 l       .text	00000000 _p4
+00000070 l       .text	00000000 _p5
+00000000 g       .text	00000000 _start
+
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	00200993          	li	s3,2
+   4:	00001eb7          	lui	t4,0x1
+   8:	ff3e8e93          	addi	t4,t4,-13 # ff3 <F_CTL>
+   c:	00001f37          	lui	t5,0x1
+  10:	fe2f0f13          	addi	t5,t5,-30 # fe2 <F_STAT>
+  14:	00001fb7          	lui	t6,0x1
+  18:	fe1f8f93          	addi	t6,t6,-31 # fe1 <F_RESULT>
+  1c:	00100e13          	li	t3,1
+  20:	00001537          	lui	a0,0x1
+  24:	ff150513          	addi	a0,a0,-15 # ff1 <F_A>
+  28:	000015b7          	lui	a1,0x1
+  2c:	ff258593          	addi	a1,a1,-14 # ff2 <F_B>
+
+00000030 <_p1>:
+  30:	41a40737          	lui	a4,0x41a40
+  34:	420f07b7          	lui	a5,0x420f0
+  38:	048000ef          	jal	ra,80 <_set_and_poll>
+  3c:	0040006f          	j	40 <_p2>
+
+00000040 <_p2>:
+  40:	c20f0737          	lui	a4,0xc20f0
+  44:	41a407b7          	lui	a5,0x41a40
+  48:	038000ef          	jal	ra,80 <_set_and_poll>
+  4c:	0040006f          	j	50 <_p3>
+
+00000050 <_p3>:
+  50:	420f0737          	lui	a4,0x420f0
+  54:	41b407b7          	lui	a5,0x41b40
+  58:	028000ef          	jal	ra,80 <_set_and_poll>
+  5c:	0040006f          	j	60 <_p4>
+
+00000060 <_p4>:
+  60:	41460737          	lui	a4,0x41460
+  64:	c0b007b7          	lui	a5,0xc0b00
+  68:	018000ef          	jal	ra,80 <_set_and_poll>
+  6c:	0040006f          	j	70 <_p5>
+
+00000070 <_p5>:
+  70:	c1460737          	lui	a4,0xc1460
+  74:	40b007b7          	lui	a5,0x40b00
+  78:	008000ef          	jal	ra,80 <_set_and_poll>
+  7c:	fb5ff06f          	j	30 <_p1>
+
+00000080 <_set_and_poll>:
+  80:	00e52023          	sw	a4,0(a0)
+  84:	00f5a023          	sw	a5,0(a1)
+  88:	01cea023          	sw	t3,0(t4)
+  8c:	000f0803          	lb	a6,0(t5)
+  90:	ffc868e3          	bltu	a6,t3,80 <_set_and_poll>
+  94:	000fa603          	lw	a2,0(t6)
+  98:	013ea023          	sw	s3,0(t4)
+  9c:	00008067          	ret

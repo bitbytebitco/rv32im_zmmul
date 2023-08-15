@@ -146,3 +146,11 @@ RISC-V ```rv32im_zmmul``` VHDL implementation
     + This python script parses each line's 32-bit hex instruction and sends each byte little-endian ordered
 + Switch(0) LOW to run PC from 0x00
 </details>
+
+
+## Bash commands to compile,link, and disassemble hex instructions 
+```
+    riscv32-unknown-elf-gcc -g -ffreestanding -O0 -Wl,--gc-sections -fno-toplevel-reorder -nostartfiles -nostdlib -nodefaultlibs -Wl,-T,c_linker.ld crt0.S main.c -o main.elf
+    riscv32-unknown-elf-objdump -drwC -S main.elf > main.dump
+```
+
