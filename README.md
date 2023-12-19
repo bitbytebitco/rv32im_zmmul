@@ -4,6 +4,13 @@ RISC-V ```rv32im_zmmul``` VHDL implementation
 
 https://github.com/bitbytebitco/rv32im_zmmul/assets/45221627/18036b1a-ddf8-41e8-9883-ab2dce9460de
 
+# Datapath
+_This is an approximation (there are some modifications to this)_
+<details>
+  <summary>Diagram (click to reveal)</summary>
+  
+![Datapath diagram](images/RISCV_datapath.jpg)
+</details>
 
 # Status Updates  
 <details>
